@@ -14,11 +14,11 @@ import android.content.Context
 
 val nodeColors : Array<String> = arrayOf("#673AB7", "#F44336", "#009688", "#8BC34A", "#FF9800")
 val circles : Int = 2
-val scGap : Float = 0.02f / (circles + 1)
+val scGap : Float = 0.02f / (circles)
 val backColor : Int = Color.parseColor("#BDBDBD")
 val delay : Long = 20
 val sizeFactor : Float = 4f
-val yFactor : Float = 4f
+val yFactor : Float = 9f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -47,7 +47,7 @@ fun Canvas.drawBBTNode(i : Int, scale : Float, paint : Paint) {
     val size : Float = gap / sizeFactor
     paint.color = Color.parseColor(nodeColors[i])
     save()
-    translate(gap * (i + 1), h / 2)
+    translate(gap * i + gap / 2, h / 2)
     drawBouncyBallToTwo(scale, size, h, paint)
     restore()
 }
