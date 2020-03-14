@@ -14,9 +14,9 @@ import android.content.Context
 
 val nodeColors : Array<String> = arrayOf("#673AB7", "#F44336", "#009688", "#8BC34A", "#FF9800")
 val circles : Int = 2
-val scGap : Float = 0.02f
+val scGap : Float = 0.02f / (circles + 1)
 val backColor : Int = Color.parseColor("#BDBDBD")
-val delay : Long = 30
+val delay : Long = 20
 val sizeFactor : Float = 4f
 val yFactor : Float = 4f
 
@@ -26,7 +26,7 @@ fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
 
 fun Canvas.drawBouncyBallToTwo(scale : Float, size : Float, h : Float, paint : Paint) {
-    val y : Float = h / yFactor
+    val y : Float = -h / yFactor
     val sf : Float = scale.sinify()
     val sf1 : Float = sf.divideScale(0, 2)
     val sf2 : Float = sf.divideScale(1, 2)
@@ -63,7 +63,7 @@ class BallToTwoBouncyView(ctx : Context) : View(ctx) {
     override fun onTouchEvent(event : MotionEvent) : Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -192,7 +192,7 @@ class BallToTwoBouncyView(ctx : Context) : View(ctx) {
             bbt.draw(canvas, paint)
             animator.animate {
                 bbt.update {
-                    animator.start()
+                    animator.stop()
                 }
             }
         }
