@@ -203,4 +203,13 @@ class BallToTwoBouncyView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : BallToTwoBouncyView {
+            val view : BallToTwoBouncyView = BallToTwoBouncyView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
