@@ -18,8 +18,36 @@ val scGap : Float = 0.02f
 val backColor : Int = Color.parseColor("#BDBDBD")
 val delay : Long = 30
 val sizeFactor : Float = 4f
+val yFactor : Float = 4f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawBouncyBallToTwo(scale : Float, size : Float, h : Float, paint : Paint) {
+    val y : Float = h / yFactor
+    val sf : Float = scale.sinify()
+    val sf1 : Float = sf.divideScale(0, 2)
+    val sf2 : Float = sf.divideScale(1, 2)
+    save()
+    translate(0f, -(h / 2 + size) * (1 - sf1))
+    for (j in 0..(circles - 1)) {
+        val sj : Float = 1f - 2 * j
+        val sfj : Float = sf2.divideScale(j, circles)
+        drawCircle(0f, y * sj * sfj, size, paint)
+    }
+    restore()
+}
+
+fun Canvas.drawBBTNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodeColors.size)
+    val size : Float = gap / sizeFactor
+    paint.color = Color.parseColor(nodeColors[i])
+    save()
+    translate(gap * (i + 1), h / 2)
+    drawBouncyBallToTwo(scale, size, h, paint)
+    restore()
+}
