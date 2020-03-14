@@ -114,4 +114,45 @@ class BallToTwoBouncyView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class BBTNode(var i : Int, val state : State = State()) {
+
+        private var next : BBTNode? = null
+        private var prev : BBTNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < nodeColors.size - 1) {
+                next = BBTNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawBBTNode(i, state.scale, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            state.update(cb)
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : BBTNode {
+            var curr : BBTNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }
